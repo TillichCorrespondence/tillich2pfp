@@ -1,0 +1,2 @@
+acdh-cidoc-pyutils
+pyocclient

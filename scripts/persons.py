@@ -16,7 +16,6 @@ from acdh_tei_pyutils.tei import TeiReader
 from acdh_tei_pyutils.utils import get_xmlid
 from rdflib import Graph, Namespace, URIRef
 from rdflib.namespace import RDF
-from datetime import datetime
 
 
 g = Graph()
@@ -61,7 +60,8 @@ for x in doc.any_xpath(".//tei:person//tei:date"):
     except Exception as e:
         print(e)
         continue
-    x.attrib["when"] = date_str
+    x.attrib["notBefore-iso"] = f"{date_str}-01-01"
+    x.attrib["notAfter-iso"] = f"{date_str}-12-31"
 doc.tree_to_file(index_file)
 doc = TeiReader(index_file)
 items = doc.any_xpath(f".//tei:{entity_type}[@xml:id]")
@@ -92,7 +92,7 @@ for x in tqdm(items, total=len(items)):
 
     # birth
     try:
-        x.xpath(".//tei:birth[./tei:date/@when or ./tei:settlement/tei:placeName[@key]]", namespaces=NSMAP)[0]
+        x.xpath(".//tei:birth[./tei:date/@notBefore-iso or ./tei:settlement/tei:placeName[@key]]", namespaces=NSMAP)[0]
         event_graph, birth_uri, birth_timestamp = make_birth_death_entities(
             subj,
             x,
@@ -109,7 +109,7 @@ for x in tqdm(items, total=len(items)):
 
     # death
     try:
-        x.xpath(".//tei:death[./tei:date/@when or ./tei:settlement/tei:placeName[@key]]", namespaces=NSMAP)[0]
+        x.xpath(".//tei:death[./tei:date/@notBefore-iso or ./tei:settlement/tei:placeName[@key]]", namespaces=NSMAP)[0]
         event_graph, death_uri, birth_timestamp = make_birth_death_entities(
             subj,
             x,

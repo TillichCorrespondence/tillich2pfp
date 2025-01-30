@@ -10,7 +10,7 @@ jobs:
     env:
       OWNCLOUD_USER: ${{ secrets.OWNCLOUD_USER }}
       OWNCLOUD_PW: ${{ secrets.OWNCLOUD_PW }}
-      # OWNCLOUD_FOLDER: pfp-data
+      OWNCLOUD_FOLDER: pfp-data
     steps:
       - name: Perform Checkout
         uses: actions/checkout@v4
